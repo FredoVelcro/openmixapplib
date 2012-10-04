@@ -74,6 +74,8 @@ class OpenmixApplication implements Lifecycle {
      * @param Utilities $utilities
      */
     public function service($request, $response, $utilities) {
+        $fp = fopen('phpapp.log', 'a');
+        //fwrite($fp, "Inside service at " . date('c') . "\n");
         try {
             $key = $this->get_key($request);
             //print("\nKey: $key");
@@ -84,6 +86,8 @@ class OpenmixApplication implements Lifecycle {
                 if (!is_null($previous) && !array_key_exists($previous, $this->providers)) {
                     $utilities->selectRandom();
                     $response->setReasonCode($this->reasons['Unexpected previous alias']);
+                    fwrite($fp, date('c') . ": Unexpected previous alias: $previous\n");
+                    fclose($fp);
                     return;
                 }
             }
@@ -116,6 +120,7 @@ class OpenmixApplication implements Lifecycle {
                                     if ($previous == $alias) {
                                         $response->selectProvider($alias);
                                         $response->setReasonCode($this->reasons['Best performing provider = previous']);
+                                        fclose($fp);
                                         return;
                                     }
                                     elseif (is_null($previous) ||
@@ -125,16 +130,19 @@ class OpenmixApplication implements Lifecycle {
                                         $response->selectProvider($alias);
                                         $response->setReasonCode($this->reasons['Either no previous or previous < availThreshold']);
                                         $this->saved[$key] = $alias;
+                                        fclose($fp);
                                         return;
                                     }
                                     else if ($candidates[$alias] < $testval) {
                                         $response->selectProvider($alias);
                                         $response->setReasonCode($this->reasons['New provider > varianceThreshold, setting new provider']);
                                         $this->saved[$key] = $alias;
+                                        fclose($fp);
                                         return;
                                     }
                                     $response->selectProvider($previous);
                                     $response->setReasonCode($this->reasons['Choosing previous. Best performing within varianceThreshold']);
+                                    fclose($fp);
                                     return;
                                 }
                             }
@@ -145,6 +153,7 @@ class OpenmixApplication implements Lifecycle {
                             $response->selectProvider($alias);
                             $this->saved[$key] = $alias;
                             $response->setReasonCode($this->reasons['All providers eliminated']);
+                            fclose($fp);
                             return;
                         }
                         else {
@@ -165,11 +174,17 @@ class OpenmixApplication implements Lifecycle {
             // If a specific provider hasn't been selected by this point,
             // select one randomly.
             $utilities->selectRandom();
+            fwrite($fp, date('c') . ": Selected a provider randomly. Usually indicates a data problem.\n");
         }
         catch (Exception $e) {
             $utilities->selectRandom();
             $response->setReasonCode($this->reasons['Caught exception']);
+            
+            // Output to log file
+            $str = date('c') . ": Encountered exception\n" . $e;
+            fwrite($fp, "$str\n");
         }
+        fclose($fp);
     }
     
     public function get_microtime() {
