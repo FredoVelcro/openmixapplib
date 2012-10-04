@@ -6,9 +6,9 @@ class OpenmixApplication implements Lifecycle {
     * @var The list of available CNAMEs, keyed by alias.
     */
     public $providers = array(
-        'provider1' => array('cname' => 'cname1.foo.com', 'padding' => 0),
-        'provider2' => array('cname' => 'cname2.foo.com', 'padding' => 10),
-        'provider3' => array('cname' => 'cname3.foo.com', 'padding' => 0)
+        'cloudfront' => array('cname' => 'd5m0og4uaboet.cloudfront.net', 'padding' => 0),
+        'cotendo' => array('cname' => 'orig-10014.cedexis.cotcdn.net', 'padding' => 10),
+        'origin' => array('cname' => 'origin.cedexis.com', 'padding' => 0)
     );
     
     private $reasons = array(
@@ -32,7 +32,7 @@ class OpenmixApplication implements Lifecycle {
     public $entries = 0;
     
     // Do not adjust above 800
-    private $max = 800;
+    private $max = 200;
     
     /**
      * @param Configuration $config
