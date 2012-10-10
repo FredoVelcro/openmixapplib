@@ -6,9 +6,9 @@ class OpenmixApplication implements Lifecycle {
     * @var The list of available CNAMEs, keyed by alias.
     */
     public $providers = array(
-        'provider1' => array('cname' => 'cname1.foo.com', 'padding' => 0),
-        'provider2' => array('cname' => 'cname2.foo.com', 'padding' => 10),
-        'provider3' => array('cname' => 'cname3.foo.com', 'padding' => 0)
+        'level3' => array('cname' => 'www.msnbc.msn.com.c.footprint.net', 'padding' => 0),
+        'akamai__vip' => array('cname' => 'assets.msnbc.msn.com.edgesuite.net', 'padding' => 0),
+        'cdnetworks' => array('cname' => 'assets.msnbc.msn.com.cdngc.net', 'padding' => 0)
     );
     
     private $reasons = array(
