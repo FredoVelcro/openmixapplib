@@ -6,9 +6,8 @@ class OpenmixApplication implements Lifecycle {
     * @var The list of available CNAMEs, keyed by alias.
     */
     public $providers = array(
-        'provider1' => array('cname' => 'cname1.foo.com', 'padding' => 0),
-        'provider2' => array('cname' => 'cname2.foo.com', 'padding' => 10),
-        'provider3' => array('cname' => 'cname3.foo.com', 'padding' => 0)
+        'akvip' => array('cname' => 'spe.atdmt.com.edgesuite.net', 'padding' => 0),
+        'az' => array('cname' => 'atlasdmt.vo.msecnd.net', 'padding' => 10),
     );
     
     private $reasons = array(
@@ -28,7 +27,7 @@ class OpenmixApplication implements Lifecycle {
     
     private $ttl = 30;
     
-    private $availabilityThreshold = 80;
+    private $availabilityThreshold = 60;
     private $varianceThreshold = .65;
     
     public $saved = array();
