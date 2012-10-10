@@ -22,19 +22,21 @@ class OpenmixApplication implements Lifecycle {
         'Caught exception' => 'H'
     );
     
+    // If you want to restrict stickiness to certain countries, list their ISO 3166-1 alpha-2
+    // codes in this array (see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    public $sticky_countries = array();
+    
     private $ttl = 30;
     
     private $availabilityThreshold = 80;
     private $varianceThreshold = .65;
     
     public $saved = array();
-    public $freqtable = array();
-    public $entries = 0;
     
     // Do not adjust above 800; it's been determined that 800 is an appropriate
     // maximum number of entries to keep the application below the imposed limit
     // of 2M.
-    private $max = 800;
+    public $max = 800;
     
     /**
      * @param Configuration $config
@@ -75,12 +77,14 @@ class OpenmixApplication implements Lifecycle {
      */
     public function service($request, $response, $utilities) {
         try {
-            $key = $this->get_key($request);
+            list($key, $country) = $this->get_key($request);
+            //print("\nkey: $key");
+            //print("\ncountry: $country");
             //print("\nKey: $key");
-            $this->update_sticky_data($key);
+            $this->update_sticky_data($key, $country);
             $previous = null;
             if (array_key_exists($key, $this->saved)) {
-                $previous = $this->saved[$key];
+                $previous = $this->saved[$key]['provider'];
                 if (!is_null($previous) && !array_key_exists($previous, $this->providers)) {
                     $utilities->selectRandom();
                     $response->setReasonCode($this->reasons['Unexpected previous alias']);
@@ -124,13 +128,13 @@ class OpenmixApplication implements Lifecycle {
                                         $avail[$previous] < $this->availabilityThreshold) {
                                         $response->selectProvider($alias);
                                         $response->setReasonCode($this->reasons['Either no previous or previous < availThreshold']);
-                                        $this->saved[$key] = $alias;
+                                        $this->saved[$key]['provider'] = $alias;
                                         return;
                                     }
                                     else if ($candidates[$alias] < $testval) {
                                         $response->selectProvider($alias);
                                         $response->setReasonCode($this->reasons['New provider > varianceThreshold, setting new provider']);
-                                        $this->saved[$key] = $alias;
+                                        $this->saved[$key]['provider'] = $alias;
                                         return;
                                     }
                                     $response->selectProvider($previous);
@@ -143,7 +147,7 @@ class OpenmixApplication implements Lifecycle {
                             //print("\nAvail data sorted: " . print_r($avail, true));
                             $alias = key($avail);
                             $response->selectProvider($alias);
-                            $this->saved[$key] = $alias;
+                            $this->saved[$key]['provider'] = $alias;
                             $response->setReasonCode($this->reasons['All providers eliminated']);
                             return;
                         }
@@ -167,6 +171,7 @@ class OpenmixApplication implements Lifecycle {
             $utilities->selectRandom();
         }
         catch (Exception $e) {
+            //print("\nEncountered exception:\n$e");
             $utilities->selectRandom();
             $response->setReasonCode($this->reasons['Caught exception']);
         }
@@ -185,27 +190,38 @@ class OpenmixApplication implements Lifecycle {
             $country = $request->geo(EDNSProperties::COUNTRY);
             $asn = $request->geo(EDNSProperties::ASN);
         }
-        return "$market-$country-$asn";
+        return array("$market-$country-$asn", $country);
     }
     
-    public function update_sticky_data($key) {
-        if (!array_key_exists($key, $this->saved)) {
-            // when at max, evict the last one added
-            if ($this->entries >= $this->max) {
-                asort($this->freqtable);
-                $last_added = key($this->freqtable);
-                unset($this->saved[$last_added]);
-                unset($this->freqtable[$last_added]);
-                gc_collect_cycles();
+    public function update_sticky_data($key, $country) {
+        //print("\nupdate_stick_data for country: $country");
+        $filtered = preg_grep("/$country/i", $this->sticky_countries);
+        //print("\npreg_grep results:\n" . print_r($filtered, true));
+        if (empty($this->sticky_countries) || !empty($filtered)) {
+            if (!array_key_exists($key, $this->saved)) {
+                // when at max, evict the last one added
+                if (count($this->saved) >= $this->max) {
+                    uasort($this->saved, array($this, 'sort_saved'));
+                    $last_added = key($this->saved);
+                    unset($this->saved[$last_added]);
+                    gc_collect_cycles();
+                }
+                $this->saved[$key]['provider'] = null;
             }
-            else {
-                $this->entries += 1;
-            }
-            $this->saved[$key] = null;
+            $this->saved[$key]['timestamp'] = $this->get_microtime();
         }
-        
-        // Update the frequency table
-        $this->freqtable[$key] = $this->get_microtime();
+    }
+    
+    public function sort_saved($left, $right) {
+        //print_r($left);
+        //print_r($right);
+        if ($left['timestamp'] < $right['timestamp']) {
+            return -1;
+        }
+        elseif ($left['timestamp'] > $right['timestamp']) {
+            return 1;
+        }
+        return 0;
     }
 }
 ?>

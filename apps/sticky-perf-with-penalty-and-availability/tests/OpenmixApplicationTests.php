@@ -108,152 +108,152 @@ class OpenmixApplicationTests extends PHPUnit_Framework_TestCase {
         $test_data = array(
             array(
                 'description' => 'no previous; all available; provider3 fastest',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 200, 'provider3' => 199 ),
                 'avail' => array( 'provider1' => 80, 'provider2' => 80, 'provider3' => 80 ),
                 'alias' => 'provider3',
                 'reason' => 'B',
-                'saved_before' => array( 'some other key' => 'some other alias' ),
+                'saved_before' => array( 'some other key' => array( 'provider' => 'some other alias' ) ),
                 'saved_after' => array(
-                    'some key' => 'provider3',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider3' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 )
             )
             ,array(
                 'description' => 'previous provider1; all available; provider1 selected; no other providers fast enough',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 200, 'provider3' => 200 ),
                 'avail' => array( 'provider1' => 80, 'provider2' => 80, 'provider3' => 80 ),
                 'alias' => 'provider1',
                 'reason' => 'A',
                 'saved_before' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 ),
                 'saved_after' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 )
             )
             ,array(
                 'description' => 'previous provider1; provider1 not available; provider2 fastest',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 189, 'provider3' => 200 ),
                 'avail' => array( 'provider1' => 79, 'provider2' => 80, 'provider3' => 80 ),
                 'alias' => 'provider2',
                 'reason' => 'B',
                 'saved_before' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 ),
                 'saved_after' => array(
-                    'some key' => 'provider2',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider2' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 )
             )
             ,array(
                 'description' => 'previous provider1; provider1 available; provider2 fastest but not fast enough',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 120, 'provider3' => 200 ),
                 'avail' => array( 'provider1' => 80, 'provider2' => 80, 'provider3' => 80 ),
                 'alias' => 'provider1',
                 'reason' => 'C',
                 'saved_before' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 ),
                 'saved_after' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 )
             )
             ,array(
                 'description' => 'previous provider1; provider1 available; provider2 fast enough to replace it',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 119, 'provider3' => 200 ),
                 'avail' => array( 'provider1' => 80, 'provider2' => 80, 'provider3' => 80 ),
                 'alias' => 'provider2',
                 'reason' => 'D',
                 'saved_before' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 ),
                 'saved_after' => array(
-                    'some key' => 'provider2',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider2' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 )
             )
             ,array(
                 'description' => 'previous provider1; no providers available; provider2 most available',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 200, 'provider3' => 200 ),
                 'avail' => array( 'provider1' => 78, 'provider2' => 79, 'provider3' => 78 ),
                 'alias' => 'provider2',
                 'reason' => 'E',
                 'saved_before' => array(
-                    'some key' => 'provider1',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider1' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 ),
                 'saved_after' => array(
-                    'some key' => 'provider2',
-                    'some other key' => 'some other alias'
+                    'some key' => array( 'provider' => 'provider2' ),
+                    'some other key' => array( 'provider' => 'some other alias' )
                 )
             )
             // Data problems
             ,array(
                 'description' => 'RTT not an array',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => 'not an array',
                 'reason' => 'F',
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'saved_after' => array( 'some other key' => 'some other alias' )
+                'saved_before' => array( 'some other key' => array( 'provider' => 'some other alias' ) ),
+                'saved_after' => array( 'some other key' => array( 'provider' => 'some other alias' ) )
             )
             ,array(
                 'description' => 'RTT contains invalid data',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'a' => 1, 'b' => 2, 'c' => 3 ),
                 'reason' => 'F',
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'saved_after' => array( 'some other key' => 'some other alias' )
+                'saved_before' => array( 'some other key' => array( 'provider' => 'some other alias' ) ),
+                'saved_after' => array( 'some other key' => array( 'provider' => 'some other alias' ) )
             )
             ,array(
                 'description' => 'Invalid previous alias',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'reason' => 'G',
-                'saved_before' => array( 'some key' => 'bogus alias' ),
-                'saved_after' => array( 'some key' => 'bogus alias' )
+                'saved_before' => array( 'some key' => array( 'provider' => 'bogus alias' ) ),
+                'saved_after' => array( 'some key' => array( 'provider' => 'bogus alias' ) ),
             )
             ,array(
                 'description' => 'avail not an array',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 200, 'provider3' => 200 ),
                 'avail' => 'not an array',
                 'reason' => 'F',
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'saved_after' => array( 'some other key' => 'some other alias' )
+                'saved_before' => array( 'some other key' => array( 'provider' => 'some other alias' ) ),
+                'saved_after' => array( 'some other key' => array( 'provider' => 'some other alias' ) )
             )
             ,array(
                 'description' => 'avail array empty',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 200, 'provider3' => 200 ),
                 'avail' => array(),
                 'reason' => 'F',
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'saved_after' => array( 'some other key' => 'some other alias' )
+                'saved_before' => array( 'some other key' => array( 'provider' => 'some other alias' ) ),
+                'saved_after' => array( 'some other key' => array( 'provider' => 'some other alias' ) )
             )
             ,array(
                 'description' => 'avail array contains invalid data',
-                'get_key' => 'some key',
+                'get_key' => array('some key', 'some country'),
                 'rtt' => array( 'provider1' => 200, 'provider2' => 200, 'provider3' => 200 ),
                 'avail' => array( 'a' => 1, 'b' => 2, 'c' => 3 ),
                 'reason' => 'F',
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'saved_after' => array( 'some other key' => 'some other alias' )
+                'saved_before' => array( 'some other key' => array( 'provider' => 'some other alias' ) ),
+                'saved_after' => array( 'some other key' => array( 'provider' => 'some other alias' ) )
             )
         );
         
         //print("\nTesting service");
-        //$test_index = 0;
+        $test_index = 0;
         foreach ($test_data as $i) {
             //print("\nTest: " . $test_index++);
             //print("\nDescription: " . $i['description']);
@@ -272,7 +272,7 @@ class OpenmixApplicationTests extends PHPUnit_Framework_TestCase {
             
             $application->expects($this->at($application_call_index++))
                 ->method('update_sticky_data')
-                ->with($i['get_key']);
+                ->with($i['get_key'][0], $i['get_key'][1]);
             
             if (array_key_exists('rtt', $i)) {
                 $request->expects($this->at($call_index++))
@@ -318,77 +318,233 @@ class OpenmixApplicationTests extends PHPUnit_Framework_TestCase {
     public function update_sticky_data() {
         $test_data = array(
             array(
-                'description' => 'new key; not maxed',
-                'key' => 'some key',
+                'description' => 'new key; not maxed; all countries sticky',
+                'sticky_countries' => array(),
                 'microtime' => 1000,
-                'freqtable_before' => array( 'some other key' => 100 ),
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'entries_before' => 0,
-                'entries_after' => 1,
-                'saved_after' => array(
-                    'some key' => null,
-                    'some other key' => 'some other alias'
-                ),
-                'freqtable_after' => array(
-                    'some key' => 1000,
-                    'some other key' => 100
-                )
-            ),
-            array(
-                'description' => 'new key; maxed',
-                'key' => 'some key',
-                'microtime' => 1000,
-                'freqtable_before' => array( 'some other key' => 100 ),
-                'saved_before' => array( 'some other key' => 'some other alias' ),
-                'entries_before' => 800,
-                'entries_after' => 800,
-                'saved_after' => array( 'some key' => null ),
-                'freqtable_after' => array( 'some key' => 1000 )
-            ),
-            array(
-                'description' => 'existing key',
-                'key' => 'some key',
-                'microtime' => 1000,
-                'freqtable_before' => array(
-                    'some key' => 100,
-                    'some other key' => 101
-                ),
+                'max' => 2,
                 'saved_before' => array(
-                    'some key' => 'some old alias',
-                    'some other key' => 'some other alias'
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
                 ),
-                'entries_before' => 0,
-                'entries_after' => 0,
                 'saved_after' => array(
-                    'some key' => 'some old alias',
-                    'some other key' => 'some other alias'
+                    'some key' => array(
+                        'provider' => null,
+                        'timestamp' => 1000
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
                 ),
-                'freqtable_after' => array(
-                    'some key' => 1000,
-                    'some other key' => 101
+            )
+            ,array(
+                'description' => 'new key; not maxed; request country sticky',
+                'sticky_countries' => array( 'some country' ),
+                'microtime' => 1000,
+                'max' => 2,
+                'saved_before' => array(
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100 
+                    )
+                ),
+                'saved_after' => array(
+                    'some key' => array(
+                        'provider' => null,
+                        'timestamp' => 1000
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
+                )
+            )
+            ,array(
+                'description' => 'new key; not maxed; request country sticky; mixed case',
+                'sticky_countries' => array( 'US', 'UK', 'FR' ),
+                'country' => 'us',
+                'microtime' => 1000,
+                'max' => 2,
+                'saved_before' => array(
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
+                ),
+                'saved_after' => array(
+                    'some key' => array(
+                        'provider' => null,
+                        'timestamp' => 1000
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
+                )
+            )
+            ,array(
+                'description' => 'new key; not maxed; request country not sticky',
+                'sticky_countries' => array( 'some other country' ),
+                'max' => 2,
+                'saved_before' => array(
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
+                ),
+                'saved_after' => array(
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 100
+                    )
+                )
+            )
+            ,array(
+                'description' => 'new key; maxed; all countries sticky',
+                'sticky_countries' => array(),
+                'microtime' => 1000,
+                'max' => 3,
+                'saved_before' => array(
+                    'some key 1' => array(
+                        'provider' => 'some provider 1',
+                        'timestamp' => 99
+                    ),
+                    'some key 2' => array(
+                        'provider' => 'some provider 2',
+                        'timestamp' => 100
+                    ),
+                    'some key 3' => array(
+                        'provider' => 'some provider 3',
+                        'timestamp' => 100
+                    )
+                ),
+                'saved_after' => array(
+                    'some key' => array(
+                        'provider' => null,
+                        'timestamp' => 1000
+                    ),
+                    'some key 2' => array(
+                        'provider' => 'some provider 2',
+                        'timestamp' => 100
+                    ),
+                    'some key 3' => array(
+                        'provider' => 'some provider 3',
+                        'timestamp' => 100
+                    )
+                )
+            )
+            ,array(
+                'description' => 'existing key; all countries sticky',
+                'sticky_countries' => array(),
+                'microtime' => 1000,
+                'max' => 2,
+                'saved_before' => array(
+                    'some key' => array(
+                        'provider' => 'some old alias',
+                        'timestamp' => 100
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 101
+                    )
+                ),
+                'saved_after' => array(
+                    'some key' => array(
+                        'provider' => 'some old alias',
+                        'timestamp' => 1000
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 101
+                    )
+                )
+            )
+            ,array(
+                'description' => 'existing key; request country sticky',
+                'sticky_countries' => array( 'US' ),
+                'country' => 'us',
+                'microtime' => 1000,
+                'max' => 2,
+                'saved_before' => array(
+                    'some key' => array(
+                        'provider' => 'some old alias',
+                        'timestamp' => 100
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 101
+                    )
+                ),
+                'saved_after' => array(
+                    'some key' => array(
+                        'provider' => 'some old alias',
+                        'timestamp' => 1000
+                    ),
+                    'some other key' => array(
+                        'provider' => 'some other alias',
+                        'timestamp' => 101
+                    )
+                )
+            )
+            ,array(
+                'description' => 'existing key; request country not sticky',
+                'sticky_countries' => array( 'US' ),
+                'max' => 2,
+                'saved_before' => array(
+                    'some key 1' => array(
+                        'provider' => 'some provider 1',
+                        'timestamp' => 100
+                    ),
+                    'some key 2' => array(
+                        'provider' => 'some provider 2',
+                        'timestamp' => 101
+                    )
+                ),
+                'saved_after' => array(
+                    'some key 1' => array(
+                        'provider' => 'some provider 1',
+                        'timestamp' => 100
+                    ),
+                    'some key 2' => array(
+                        'provider' => 'some provider 2',
+                        'timestamp' => 101
+                    )
                 )
             )
         );
         
         //print("\nTesting update_sticky_data");
-        //$test_index = 0;
+        $test_index = 0;
         foreach ($test_data as $i) {
             //print("\nTest: " . $test_index++);
             //print("\nDescription: " . $i['description']);
             $application = $this->getMock('OpenmixApplication', array('get_microtime'));
-            $application->freqtable = $i['freqtable_before'];
+            $application->sticky_countries = $i['sticky_countries'];
             $application->saved = $i['saved_before'];
-            $application->entries = $i['entries_before'];
+            $application->max = $i['max'];
             
-            $application->expects($this->once())
-                ->method('get_microtime')
-                ->will($this->returnValue($i['microtime']));
+            if (array_key_exists('microtime', $i)) {
+                $application->expects($this->once())
+                    ->method('get_microtime')
+                    ->will($this->returnValue($i['microtime']));
+            }
+            else {
+                $application->expects($this->never())
+                    ->method('get_microtime');
+            }
             
-            $application->update_sticky_data($i['key']);
+            // Code under test
+            if (array_key_exists('country', $i)) {
+                $application->update_sticky_data('some key', $i['country']);
+            }
+            else {
+                $application->update_sticky_data('some key', 'some country');
+            }
             
-            $this->assertEquals($i['entries_after'], $application->entries);
+            // Assertions
             $this->assertEquals($i['saved_after'], $application->saved);
-            $this->assertEquals($i['freqtable_after'], $application->freqtable);
         }
     }
     
@@ -408,7 +564,7 @@ class OpenmixApplicationTests extends PHPUnit_Framework_TestCase {
                     'country' => 'some edns country',
                     'asn' => 'some edns asn',
                 ),
-                'result' => 'some edns market-some edns country-some edns asn'
+                'result' => array('some edns market-some edns country-some edns asn', 'some edns country')
             ),
             array(
                 'description' => 'EDNS not enabled',
@@ -416,7 +572,7 @@ class OpenmixApplicationTests extends PHPUnit_Framework_TestCase {
                 'market' => 'some market',
                 'country' => 'some country',
                 'asn' => 'some asn',
-                'result' => 'some market-some country-some asn'
+                'result' => array('some market-some country-some asn', 'some country')
             )
         );
         
