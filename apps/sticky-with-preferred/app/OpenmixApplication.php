@@ -30,9 +30,9 @@ class OpenmixApplication implements Lifecycle
      * Example::
      *
      * $preferred = array(
-     *    'NA-US-1234' => array( 'provider' => 'cotendo' ),
-     *    'NA-US-2345' => array( 'provider' => 'bitgravity' ),
-     *    'NA-US-3456' => array( 'provider' => 'akamai' ),
+     *    'NA-US-1234' => 'cotendo',
+     *    'NA-US-2345' => 'bitgravity',
+     *    'NA-US-3456' => 'akamai',
      * );
      */
     public $preferred = array(
@@ -570,6 +570,8 @@ class OpenmixApplication implements Lifecycle
         'NA-US-4583' => array( 'provider' => 'akamai__vip' ),
     );
     
+    public $saved = array();
+    
     public $reasons = array(
         'Data problem' => 'A',
         'Fastest provider' => 'B',
@@ -583,6 +585,9 @@ class OpenmixApplication implements Lifecycle
      **/
     public function init($config)
     {
+        // Copy preferred to saved
+        $this->saved = $this->preferred;
+        
         $config->declareInput(EDNSProperties::ENABLE);
         
         $config->declareInput(
@@ -684,8 +689,8 @@ class OpenmixApplication implements Lifecycle
         }
         
         $saved_alias = null;
-        if (array_key_exists('saved', $this->preferred[$key])) {
-            $saved_alias = $this->preferred[$key]['saved'];
+        if (array_key_exists($key, $this->saved)) {
+            $saved_alias = $this->saved[$key];
         }
         
         if (array_key_exists($saved_alias, $candidates)) {
@@ -694,30 +699,30 @@ class OpenmixApplication implements Lifecycle
             if ($candidates[$alias] < $test_val) {
                 $response->selectProvider($alias);
                 $response->setReasonCode($this->reasons['Fastest provider']);
-                $this->preferred[$key]['saved'] = $alias;
+                $this->saved[$key] = $alias;
                 return;
             }
             $response->selectProvider($saved_alias);
             $response->setReasonCode($this->reasons['Saved provider']);
-            $this->preferred[$key]['saved'] = $saved_alias;
+            $this->saved[$key] = $saved_alias;
             return;
         }
         
         // Fall back to the preferred provider
-        $preferred_alias = $this->preferred[$key]['provider'];
+        $preferred_alias = $this->preferred[$key];
         $test_val = $this->varianceThreshold * $candidates[$preferred_alias];
         //print("\nPreferred: $preferred_alias, RTT: " . var_export($test_val, true));
         
         if ($candidates[$alias] < $test_val) {
             $response->selectProvider($alias);
             $response->setReasonCode($this->reasons['Fastest provider']);
-            $this->preferred[$key]['saved'] = $alias;
+            $this->saved[$key] = $alias;
             return;
         }
         
         $response->selectProvider($preferred_alias);
         $response->setReasonCode($this->reasons['Preferred provider']);
-        $this->preferred[$key]['saved'] = $preferred_alias;
+        $this->saved[$key] = $preferred_alias;
     }
     
     public function get_key($request) {
